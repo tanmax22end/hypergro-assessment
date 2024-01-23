@@ -37,6 +37,23 @@ Stock Price Analysis Application.
     npm start
     ```
 
+
+## Server Refresh Functionality
+
+Upon starting the server, the script performs the following actions to ensure the latest trading data is up-to-date:
+
+1. **Fetch Latest Trading Data:**
+
+   - The server fetches the latest trading data from the BSE (Bombay Stock Exchange) website.
+   - The data is retrieved in the form of a ZIP file containing an Excel sheet.
+
+2. **Process and Update MongoDB:**
+
+   - The script processes the data from the Excel sheet and inserts it into the MongoDB database.
+   - The MongoDB database is updated with the latest stock information.
+
+
+
 ## API Endpoints
 
 ### 1. Get Top Stocks
