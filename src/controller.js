@@ -14,6 +14,9 @@ class Controller {
     async getStock(req, res) {
         try {
             const { name } = req.query;
+            if (!name || !/^[a-zA-Z0-9]{2,20}$/.test(name)) {
+                return res.status(400).json({ error: 'Invalid stock name. It should be alphanumeric and between 2 to 20 characters.' });
+            }
             const response = await Service.getStocksService(name);
             res.status(200).send(response);
         } catch (error) {
@@ -23,9 +26,12 @@ class Controller {
     async addFavorites(req, res) {
         try {
             const { userId, stockId } = req.body;
-            if (!userId  || !stockId) {
-                res.status(400).send({ error: 'Invalid Request. Provide valid stock details' });
-                return;
+            if (!userId || !(/^[1-9]\d{0,8}$/.test(userId))) {
+                return res.status(400).json({ error: 'Invalid User ID. It should be a number between 1 and 1 billion.' });
+            }
+
+            if (!stockId || (!/^[1-9]\d{0,8}$/.test(stockId))) {
+                return res.status(400).json({ error: 'Invalid Stock ID. It should be a number between 1 and 1 billion.' });
             }
             const validatedInput = { userId, stockId };
             const response = await Service.updateFavouriteStock(validatedInput);
@@ -37,8 +43,8 @@ class Controller {
     async getFavourites(req, res) {
         try {
             const { userId } = req.query;
-            if (!userId) {
-                res.status(400).send({ error: 'Invalid Request. Provide valid UserId' });
+            if (!userId || (!/^[1-9]\d{0,8}$/.test(userId))) {
+                return res.status(400).json({ error: 'Invalid User ID. It should be a number between 1 and 1 billion.' });
             }
             console.log(req.query);
             const response = await Service.getFavouriteStock(req.query);
@@ -50,9 +56,11 @@ class Controller {
     async deleteFavourites(req, res) {
         try {
             const { userId, stockId } = req.query;
-            if (!userId || !stockId) {
-                res.status(400).send({ error: 'Invalid Request. Provide valid stock details' });
-                return;
+            if (!userId || !/^[1-9]\d{0,8}$/.test(userId)) {
+                return res.status(400).json({ error: 'Invalid User ID. It should be a number between 1 and 1 billion.' });
+            }
+            if (!stockId || !/^[1-9]\d{0,8}$/.test(stockId)) {
+                return res.status(400).json({ error: 'Invalid Stock ID. It should be a number between 1 and 1 billion.' });
             }
             const validatedInput = req.query;
             const response = await Service.deleteFavouriteStock(validatedInput);
@@ -64,7 +72,7 @@ class Controller {
     async stockPriceHistory(req, res) {
         try {
             const { SC_CODE } = req.query;
-            if (!SC_CODE) {
+            if (!SC_CODE || !/^[1-9]\d{0,8}$/.test(SC_CODE)) {
                 res.status(400).send({ error: 'Invalid Request. Provide valid stock details' });
                 return;
             }
