@@ -38,6 +38,7 @@ Stock Price Analysis Application.
     ```
 
 
+
 ## Server Refresh Functionality
 
 Upon starting the server, the script performs the following actions to ensure the latest trading data is up-to-date:
@@ -51,6 +52,12 @@ Upon starting the server, the script performs the following actions to ensure th
 
    - The script processes the data from the Excel sheet and inserts it into the MongoDB database.
    - The MongoDB database is updated with the latest stock information.
+
+
+3. **Historical Data Update (Last 90 Days):**
+
+   - Additionally, a script was executed to fetch and insert the last 90 days' stock data into the MongoDB database.
+   - The script iterates over the last 90 days, fetching data for each day and updating the database.
 
 
 
