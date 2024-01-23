@@ -1,4 +1,4 @@
-# Project Title
+# Hypergro-Assessment
 
 Stock Price Analysis Application.
 
