@@ -8,9 +8,6 @@ const StockDetails = require('../src/models/stock-info.js');
 require('dotenv').config();
 const username = process.env.MONGODB_USERNAME;
 const password = process.env.MONGODB_PASSWORD;
-console.log(username);
-console.log(password);
-
 async function fetchDataFromBSE(date) {
     try {
         const bseUrl = `https://www.bseindia.com/download/BhavCopy/Equity/EQ${date}_CSV.ZIP`;
