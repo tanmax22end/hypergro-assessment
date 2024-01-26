@@ -115,4 +115,4 @@ Upon starting the server, the script performs the following actions to ensure th
 ## Authors
 
 - Author - 1 - [GitHub](https://github.com/tanmax22end) -> (My personal account)
-- Author - 2 - [GitHub](https://github.com/tanmayincru) -> (My current companies github account)
+- Author - 2 - [GitHub](https://github.com/tanmayincru) -> (My current company github account)
