@@ -11,6 +11,15 @@ class Controller {
             res.status(400).send({ error: error });
         }
     }
+    async getTodayTopStock(req, res) {
+        try {
+            const response = await Service.getTodayTopStockService();
+            res.status(200).send(response);
+        } catch (error) {
+            res.status(400).send({ error: error });
+        }
+    }
+
     async getStock(req, res) {
         try {
             const { name } = req.query;
@@ -81,6 +90,60 @@ class Controller {
             res.status(200).send(response);
         } catch (error) {
             res.status(400).send({ message: 'Unable to fetch stock history stock' });
+        }
+    }
+    async fetchDataFromBSE(date) {
+    try {
+        const bseUrl = `https://www.bseindia.com/download/BhavCopy/Equity/EQ${date}_CSV.ZIP`;
+        const response = await axios.get(bseUrl, { responseType: 'arraybuffer' });
+        const zip = new AdmZip(response.data);
+        const zipEntries = zip.getEntries();
+        // Assume the Excel file is present in the ZIP
+        const excelEntry = zipEntries.find(entry => entry.entryName.endsWith('.CSV'));
+        if (!excelEntry) {
+            throw new Error('Excel file not found in the ZIP.');
+        }
+        // Save the Excel file in the current directory
+        const excelFilePath = path.join(__dirname, `EQ${date}_Data.CSV`);
+        fs.writeFileSync(excelFilePath, zip.readAsText(excelEntry));
+        console.log(`Data for ${date} saved successfully.`);
+    } catch (error) {
+        console.error(`Error fetching data for ${date}:`, error.message);
+    }
+    }
+    async fetchDataFromBSE(date) {
+    try {
+        const bseUrl = `https://www.bseindia.com/download/BhavCopy/Equity/EQ${date}_CSV.ZIP`;
+        const response = await axios.get(bseUrl, { responseType: 'arraybuffer' });
+        const zip = new AdmZip(response.data);
+        const zipEntries = zip.getEntries();
+        // Assume the Excel file is present in the ZIP
+        const excelEntry = zipEntries.find(entry => entry.entryName.endsWith('.CSV'));
+        if (!excelEntry) {
+            throw new Error('Excel file not found in the ZIP.');
+        }
+        // Save the Excel file in the current directory
+        const excelFilePath = path.join(__dirname, `./scripts/EQ${date}_Data.CSV`);
+        fs.writeFileSync(excelFilePath, zip.readAsText(excelEntry));
+        console.log(`Data for ${date} saved successfully.`);
+    } catch (error) {
+        console.error(`Error fetching data for ${date}:`, error.message);
+    }
+    }
+    async refreshDataController(req, res) {
+        try {
+            console.log("Server started successfully");
+            const currentDate = new Date();
+            let date = currentDate
+                .toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })
+                .replace(/\//g, ''); // Format: DDMMYY
+            await fetchDataFromBSE(date);
+            const filepath = path.join(__dirname, `./scripts/EQ${date}_Data.CSV`);
+            console.log(filepath)
+            await insertDataFromExcel(filepath);
+            res.status(200).send({ message: 'latest data has been successfully uploaded' });
+        } catch (error) {
+            res.status(400).send({ message: 'Unable to fetch latest data' }, error);
         }
     }
 }

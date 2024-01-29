@@ -33,6 +33,26 @@ class Service {
             return { error: 'Internal Server Error' };
         }
     }
+
+    async getTodayTopStockService() {
+        try {
+            const todayHigh = await StockDetails.aggregate([
+                {
+                    $sort: {
+                        CLOSE: -1
+                    }
+                },
+                {
+                    $limit: 1
+                }
+            ]);
+            return { todayHigh };
+        } catch (error) {
+            console.log('Error fetching the top stocks', error);
+            return { error: 'Error fetching the top stocks' };
+        }
+    }
+
     async getStocksService(input) {
         try {
             /*const stocksByName = await StockDetails.find({ SC_NAME: { $regex: new RegExp(input, 'i') } });*/

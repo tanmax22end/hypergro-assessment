@@ -26,6 +26,14 @@ const routes = (express) => {
         "/v1/stockPriceHistory",
         controller.stockPriceHistory
     )
+    router.get(
+        "/v1/todaytopStock",
+        controller.getTodayTopStock
+    )
+    router.get(
+        "v1/refreshData",
+        controller.refreshDataController
+    )
     return router;
 }
 //module.exports = routes
